@@ -1,0 +1,36 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+
+    p {
+        @apply mb-4
+    }
+    p:last-of-type {
+        @apply mb-0
+    }
+
+    .icon svg {
+        top: -1px;
+        @apply inline-block align-middle relative
+    }
+
+    main a {
+        @apply transition duration-75
+    }
+
+}
+
+@layer components {
+
+    .pagination span[aria-current] span {
+        @apply bg-gray-100 font-bold
+    }
+    .pagination span[aria-disabled] span {
+        @apply text-gray-300
+    }
+
+}
+
+[x-cloak] { display: none; }
