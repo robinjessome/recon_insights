@@ -14,7 +14,7 @@ switch ($style) {
         $styleClasses = 'text-gray-700 border-gray-300 hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-200';
          break;
     case 'primary':
-        $styleClasses = 'text-white border-transparent bg-blue-500 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900';
+        $styleClasses = 'text-white border-transparent bg-sky-500 hover:bg-sky-700 active:bg-sky-900 focus:border-sky-900';
          break;
     case 'success':
         $styleClasses = 'text-white border-transparent bg-success-500 hover:bg-success-600 active:bg-success-700 focus:border-success-800';
@@ -54,7 +54,7 @@ switch ($size) {
 @else --}}
     <button {{ $attributes->merge([
         'type' => $type, 
-        'class' => 'inline-flex items-center border rounded font-semibold uppercase tracking-widest focus:outline-none disabled:opacity-25 transition ease-in-out duration-150 focus:ring ring-gray-300 '.$styleClasses.' '.$sizeClasses]) }}>
+        'class' => 'inline-flex items-center justify-center text-center border rounded font-semibold uppercase tracking-widest focus:outline-none disabled:opacity-25 transition ease-in-out duration-150 focus:ring ring-gray-300 '.$styleClasses.' '.$sizeClasses]) }}>
         {{ $slot }}
     </button>
 {{-- @endif --}}

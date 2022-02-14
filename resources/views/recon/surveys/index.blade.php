@@ -1,9 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-headline level="h1">{{ __('Surveys') }}</x-headline>
-        <div>
-            <x-button x-on:click="showCreateSurvey = true">{{ __('Create new survey') }}</x-button>
-        </div>
+        <x-header>
+            <x-headline level="h1">{{ __('Surveys') }}</x-headline>
+            <div>
+                <x-button x-on:click="showCreateSurvey = true">{{ __('Create new survey') }}</x-button>
+            </div>
+        </x-header>
     </x-slot>
 
         <x-container class="py-12">

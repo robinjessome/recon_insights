@@ -34,7 +34,13 @@ Route::middleware(['auth'])->group(function () {
     // Surveys 
     Route::controller(ReconSurveysController::class)->prefix('surveys')->group(function () {
         Route::get('/', 'index')->name('surveys');
-        Route::get('/edit/{surveyId}', 'edit')->name('edit-survey');
+        Route::get('/edit/{surveyId}', 'showSurvey')->name('edit-survey');
+        Route::get('/edit', function () {
+            abort(404);
+        });
+
+        Route::post('/update', 'updateSurvey')->name('update-survey');
+
     });
     // Route::get('/surveys', ShowAllSurveys::class)->name('surveys');
     // Route::get('/edit/{surveyId}', Edit::class)->name('edit-survey');

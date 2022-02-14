@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire\Surveys;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Surveys;
@@ -19,11 +20,16 @@ class Create extends Component
     // public $authorName;
     // public $description = '';
 
-    protected $listeners = ['editorjs-save:myEditor' => 'saveEditorState']; 
+    // protected $listeners = ['editorjs-save:myEditor' => 'saveEditorState']; 
+
+    protected $validationAttributes = [
+        'title' => 'survey title',
+        'slug' => 'url slug',     
+    ];
 
     protected $rules = [
         'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:surveys',
+        'slug' => 'required|string|max:120|unique:surveys',
     ];
 
 
@@ -58,7 +64,7 @@ class Create extends Component
         ]);
 
         if ($create) {
-            session()->flash('message', __('Survey created successfully'));
+            session()->flash('message', 'Survey <strong>'.$this->title.'</strong> created successfully');
             session()->flash('message-type', 'success'); 
             return redirect()->route('edit-survey', ['surveyId'=> $this->slug]);
         } else {

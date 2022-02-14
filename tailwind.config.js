@@ -22,6 +22,9 @@ module.exports = {
                 info: colors.cyan,
                 warning: colors.amber,
             },
+            transitionProperty: {
+                'stealth': 'margin, padding, background, background-color, color',
+            }
         },
     },
 

@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-headline level="h1">{{ __('Dashboard') }}</x-headline>
+        <x-header>
+            <x-headline level="h1">{{ __('Dashboard') }}</x-headline>
+        </x-header>
     </x-slot>
 
         <x-container class="py-12">

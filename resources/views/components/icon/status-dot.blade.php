@@ -16,13 +16,15 @@ switch ($status) {
         $statusClasses = 'bg-success-50 border-success-500';
          break;
     case 'archived':
-    default:
         $statusClasses = 'bg-gray-100 border-gray-300';
+         break;
+    default:
+        $statusClasses = 'bg-gray-50 border-gray-400';
         break;
 }
 
 @endphp
 <span 
     {{ $attributes->merge([
-    'class' => 'border inline-block w-4 h-4 align-middle rounded-full '.$statusClasses
+    'class' => 'border inline-block w-3 h-3 align-middle rounded-full '.$statusClasses
 ]) }}></span>

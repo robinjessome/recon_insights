@@ -1,30 +1,63 @@
 
 <div>
-@if (!$surveys->isEmpty())
-<div class="flex justify-center">
-    {{-- <div class="w-full px-6 mb-2">
-        <label class="inline-flex items-center">
-          <input type="checkbox" wire:model="showArchived" wire:change="showAll" checked="" class="rounded-full">
-          <span class="ml-2 text-sm">{{  __('Include archived') }}</span>
-        </label>
-    </div> --}}
-  </div>
-    <x-table class="mb-2">
+<div class="flex-col space-y-4">
+    <div class="flex items-center space-x-4"> 
+        <div class="w-1/4"> 
+            <x-input type="text" wire:model.debounce.300ms="search" placeholder="{{ __('Search surveys...') }}" />
+        </div>
+        <div>
+            <label>
+                <x-input.checkbox wire:model="showArchived" class="rounded-full" />
+                <span class="ml-1 text-sm">{{  __('Show archived') }}</span>
+            </label>
+        </div>
+    </div>
+    <x-table>
         <x-slot name="tableHead">
-            <x-table.heading><x-icon.status-dot status="archived" /></x-table.heading>
-            <x-table.heading>{{ __('Survey Name') }}</x-table.heading>
-            <x-table.heading>{{ __('Slug') }}</x-table.heading>
-            <x-table.heading>{{ __('Publish Date') }}</x-table.heading>
+            <x-table.row class="bg-gray-200">
+                <x-table.heading sortable 
+                    wire:click="sortBy('status')" 
+                    :direction="$sortField === 'status' ? $sortDirection : null"
+                    class="pr-0">
+                    <x-icon.status-dot />
+                </x-table.heading>
+
+                <x-table.heading sortable 
+                    wire:click="sortBy('title')" 
+                    :direction="$sortField === 'title' ? $sortDirection : null"
+                    class="w-1/2"
+                    >
+                    {{ __('Title') }}
+                </x-table.heading>
+
+                <x-table.heading sortable 
+                    wire:click="sortBy('slug')"
+                    :direction="$sortField === 'slug' ? $sortDirection : null"
+                    >
+                    {{ __('URL Slug') }}
+                </x-table.heading>
+
+                <x-table.heading sortable 
+                    wire:click="sortBy('publishDate')"
+                    :direction="$sortField === 'publishDate' ? $sortDirection : null"
+                    >
+                    {{ __('Start Date') }}
+                </x-table.heading>
+            </x-table.row>
         </x-slot>
         <x-slot name="tableBody">
-            @foreach ($surveys as $survey )
+        @forelse ($surveys as $survey )
             @php
                 $isArchived = false;
                 if($survey->status == 'archived') {
                     $isArchived = true;
                 }
             @endphp
-            <x-table.row>
+            {{-- wire:loading.class.delay="opacity-30" --}}
+            <x-table.row 
+                wire:loading.class.delay.long="opacity-30"
+                wire:key="{{ $loop->index }}"
+            >
                 <x-table.cell 
                     x-data="{ tooltip: false }"
                     x-on:mouseover="tooltip = true" 
@@ -57,7 +90,24 @@
                 </x-table.cell>
 
             </x-table.row>
-        @endforeach
+
+        @empty
+
+            <x-table.row>
+                <x-table.cell colspan="4"> 
+                    <div class="flex justify-center items-center">
+                        <div class="px-8 py-16 text-center">
+                            <x-icon.exclamation-circle class="inline-block mb-2 text-gray-300 w-16" iconClass='' />
+                            <span class="block text-gray-500 text-lg italic mb-6">{{ __('No surveys found!') }}</span>
+                            <x-button style="outline" x-on:click="showCreateSurvey = true">{{ __('Create a new survey!') }}</x-button>
+                        </div>
+                    </div>
+                    {{-- <p><x-button style="primary" x-on:click="showCreateSurvey = true">{{ __('Create your first survey!') }}</x-button></p> --}}
+                </x-table.cell>
+            </x-table.row>
+
+        @endforelse
+
         </x-slot>
     </x-table>
     
@@ -65,21 +115,5 @@
         {{  $surveys->links() }}
     </div>
 
-@else
-    <div class="w-full text-center mt-12">
-        <p class="text-gray-400 text-lg italic">{{ __('No surveys found!') }}</p>
-        <p><x-button style="primary" x-on:click="showCreateSurvey = true">{{ __('Create your first survey!') }}</x-button></p>
-    </div>
-@endif
-
-{{-- 
-    <ul>
-        @foreach ($surveys as $survey )
-            <li>
-                <a href="{{ route('edit-survey', ['surveyId' => $survey->slug]) }}"><strong>{{ $survey['title'] }}</strong>&nbsp;&nbsp;<span class="font-mono text-gray-400">{{ $survey->slug }}</span></a>
-            </li>
-        @endforeach
-    </ul>
-    @else 
-    @endif --}}
+</div>
 </div>

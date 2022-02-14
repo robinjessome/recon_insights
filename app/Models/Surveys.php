@@ -38,5 +38,10 @@ class Surveys extends Model
         return $this->publishDate->format('M d, Y');
     }
 
+    public function getPublishDateTimeForHumansAttribute() 
+    {
+        return $this->publishDate->format('M d, Y g:ia');
+    }
+
     use HasFactory;
 }

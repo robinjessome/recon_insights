@@ -16,12 +16,13 @@ class CreateSurveysTable extends Migration
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
             $table->string('surveyId')->unique();
-            $table->enum('status', ['archived','expired','draft','published'])->default('draft');
+            $table->enum('status', ['archived','expired','draft','scheduled','published'])->default('draft');
             $table->string('slug')->unique();
             $table->string('title');
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
             $table->json('content')->nullable();
             $table->dateTime('publishDate')->nullable();
+            $table->dateTime('startDate')->nullable();
             $table->dateTime('expireDate')->nullable();
             $table->string('author')->nullable();
             $table->timestamps();
