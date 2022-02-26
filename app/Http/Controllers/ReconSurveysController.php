@@ -43,15 +43,11 @@ class ReconSurveysController extends Controller
             return back()->with('message', 'Oops!');
         }
 
-        // dd($request->file('featuredImage'));
-
-        // return back()->with('message', $request['featuredImage']);
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:120',
             'description' => 'max:255',
-            'featuredImage' => 'nullable|image', //image|max:102400
+            // 'featuredImage' => 'nullable|image', //image|max:102400
         ]);
 
         Storage::disk('s3')->put('avatars/1', $request['featuredImage']);
