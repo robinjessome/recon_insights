@@ -50,7 +50,9 @@ class ReconSurveysController extends Controller
             // 'featuredImage' => 'nullable|image', //image|max:102400
         ]);
 
-        Storage::disk('s3')->put('avatars/1', $request['featuredImage']);
+        if($request['featuredImage']) {
+            Storage::disk('s3')->put('avatars/1', $request['featuredImage']);
+        }
 
         // $path = $request['featuredImage']->store('photos');
 
