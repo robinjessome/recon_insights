@@ -13,11 +13,11 @@
 @endphp
 
 <th {{ $attributes->merge([
-    'class' => 'px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'
+    'class' => 'px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider'
 ]) }}>
     {{-- {{ $slot }} --}}
     @if($sortable)
-    <button class="group block font-bold text-gray-600 uppercase tracking-wider">
+    <button class="group block font-medium text-gray-600 uppercase tracking-wider">
         {{ $slot }}
         @if($direction == 'desc')
             <x-icon.chevron-down class="{{ $iconVisibility }} group-hover:opacity-100 transition" iconClass="w-4 h-4" />

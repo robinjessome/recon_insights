@@ -8,10 +8,13 @@
 switch ($status) {
     case 'published':
         $statusClasses = 'bg-success-400 border-success-500';
-        break;
+         break;
+    case 'scheduled':
+        $statusClasses = 'bg-success-50 border-success-400';
+         break;
     case 'draft':
         $statusClasses = 'bg-warning-400 border-warning-500';
-        break;
+         break;
     case 'expired':
         $statusClasses = 'bg-success-50 border-success-500';
          break;

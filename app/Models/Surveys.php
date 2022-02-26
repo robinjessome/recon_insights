@@ -17,6 +17,7 @@ class Surveys extends Model
         'surveyId',
         'title',
         'slug',
+        'featuredImage',
         'author',
         'content',
         'published',
@@ -38,9 +39,19 @@ class Surveys extends Model
         return $this->publishDate->format('M d, Y');
     }
 
+    public function getExpireDateForHumansAttribute() 
+    {
+        return $this->expireDate->format('M d, Y');
+    }
+
     public function getPublishDateTimeForHumansAttribute() 
     {
-        return $this->publishDate->format('M d, Y g:ia');
+        return $this->publishDate->format('M d, Y g:iA');
+    }
+
+    public function getExpireDateTimeForHumansAttribute() 
+    {
+        return $this->expireDate->format('M d, Y g:iA');
     }
 
     use HasFactory;

@@ -13,7 +13,7 @@ $alertClasses = array(
 @endphp
 
 <div {{ $attributes->merge([
-    'class' => 'border-2 fixed right-12 bottom-12 p-3 pl-4 rounded bg-white shadow hover:shadow-lg transition flex space-between items-center '.$alertClasses[$type]
+    'class' => 'border-2 fixed right-12 bottom-20 p-3 pl-4 rounded bg-white shadow hover:shadow-lg transition flex space-between items-center '.$alertClasses[$type]
 ]) }}
     x-data="{ noticeOpen: true }"
     x-show="noticeOpen"

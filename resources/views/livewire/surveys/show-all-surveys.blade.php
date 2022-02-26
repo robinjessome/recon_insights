@@ -6,7 +6,7 @@
             <x-input type="text" wire:model.debounce.300ms="search" placeholder="{{ __('Search surveys...') }}" />
         </div>
         <div>
-            <label>
+            <label class="font-light">
                 <x-input.checkbox wire:model="showArchived" class="rounded-full" />
                 <span class="ml-1 text-sm">{{  __('Show archived') }}</span>
             </label>
@@ -25,7 +25,7 @@
                 <x-table.heading sortable 
                     wire:click="sortBy('title')" 
                     :direction="$sortField === 'title' ? $sortDirection : null"
-                    class="w-1/2"
+                    class="w-1/3"
                     >
                     {{ __('Title') }}
                 </x-table.heading>
@@ -42,6 +42,15 @@
                     :direction="$sortField === 'publishDate' ? $sortDirection : null"
                     >
                     {{ __('Start Date') }}
+                </x-table.heading>
+                <x-table.heading sortable 
+                    wire:click="sortBy('expireDate')"
+                    :direction="$sortField === 'expireDate' ? $sortDirection : null"
+                    >
+                    {{ __('End Date') }}
+                </x-table.heading>
+                <x-table.heading>
+                    <x-icon.edit class="w-4 h-4" />
                 </x-table.heading>
             </x-table.row>
         </x-slot>
@@ -69,24 +78,38 @@
                         x-cloak 
                         x-show.transition="tooltip"
                         x-transition
-                        class="absolute whitespace-nowrap left-12 -toxp-2 text-sm shadow-lg bg-white border rounded-sm px-3 py-1 z-30"
+                        class="absolute whitespace-nowrap left-12 text-sm shadow-lg bg-white border rounded-sm px-3 py-1 z-30"
                     >
                         {{ str()->title( __($survey->status)) }}
                     </span>
                 </x-table.cell>
 
-                <x-table.cell :status="$survey->status" class="font-bold">
-                    <a href="{{ route('edit-survey', ['surveyId' => $survey->slug]) }}" class="hover:text-sky-600">{{ $survey->title }}</a>
+                <x-table.cell :status="$survey->status" class="font-semibold truncate">
+                    <a href="{{ route('survey-insights', ['surveyId' => $survey->slug]) }}" class=" hover:text-sky-600 focus:text-sky-600">
+                        {{ $survey->title }}
+                    </a>
                 </x-table.cell>
 
                 <x-table.cell :status="$survey->status">
                     <span class="font-mono">{{ $survey->slug }}</span>
                 </x-table.cell>
 
-                <x-table.cell :status="$survey->status">
+                <x-table.cell :status="$survey->status" class="font-light text-sm">
                     @if($survey->publishDate)
                         {{ $survey->publishDate_for_humans }}
                     @endif
+                </x-table.cell>
+
+                <x-table.cell :status="$survey->status" class="font-light text-sm">
+                    @if($survey->expireDate)
+                        {{ $survey->expireDate_for_humans }}
+                    @endif
+                </x-table.cell>
+
+                <x-table.cell>
+                    <a href="{{ route('edit-survey', ['surveyId' => $survey->slug]) }}" class="text-gray-400 hover:text-sky-600 focus:text-sky-600">
+                        <x-icon.edit class="w-4 h-4" />
+                    </a>
                 </x-table.cell>
 
             </x-table.row>
@@ -94,7 +117,7 @@
         @empty
 
             <x-table.row>
-                <x-table.cell colspan="4"> 
+                <x-table.cell colspan="6"> 
                     <div class="flex justify-center items-center">
                         <div class="px-8 py-16 text-center">
                             <x-icon.exclamation-circle class="inline-block mb-2 text-gray-300 w-16" iconClass='' />

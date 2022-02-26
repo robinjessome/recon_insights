@@ -6,7 +6,7 @@
     aria-modal="true"
     x-id="['modal-title']"
     :aria-labelledby="$id('modal-title')"
-    class="fixed inset-0 overflow-y-auto"
+    class="fixed inset-0 overflow-y-auto z-[60]"
 >
     <x-modal.overlay x-show="showCreateSurvey" />
 

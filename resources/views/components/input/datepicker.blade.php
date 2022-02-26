@@ -4,8 +4,17 @@
     @endpush
 @endonce
 
+{{--     x-init="flatpickr($refs.input, {dateFormat:'Z', altFormat:'F j, Y h:iK', altInput:true, enableTime: true, minDate: 'today', inline: true } );"
+    x-ref="input" 
+
+
+
+    dateFormat:"Y-m-d H:i", altFormat:"F j, Y h:iK", altInput:true, enableTime: true, minDate: "today"
+    
+    --}}
+
 @props([
-    'options' => '{dateFormat:"Y-m-d H:i", altFormat:"F j, Y h:iK", altInput:true, enableTime: true }',
+    'options' => '{dateFormat:"Y-m-d H:i", altFormat:"F j, Y h:iK", altInput:true, enableTime: true, minDate: "today", inline: true }',
     'stealth' => false,
     ])
 
@@ -33,7 +42,7 @@
 
 
     <input
-        x-data
+        {{-- x-data --}}
         x-init="flatpickr($refs.input, {{ $options }} );"
         x-ref="input"
         type="text"

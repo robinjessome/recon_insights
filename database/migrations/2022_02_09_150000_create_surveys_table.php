@@ -20,9 +20,9 @@ class CreateSurveysTable extends Migration
             $table->string('slug')->unique();
             $table->string('title');
             $table->string('description')->nullable();
+            $table->string('featuredImage')->nullable();
             $table->json('content')->nullable();
             $table->dateTime('publishDate')->nullable();
-            $table->dateTime('startDate')->nullable();
             $table->dateTime('expireDate')->nullable();
             $table->string('author')->nullable();
             $table->timestamps();

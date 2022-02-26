@@ -16,7 +16,14 @@
         @stack('styles')
 
     </head>
-    <body class="font-sans antialiased" x-data="{showCreateSurvey: false }">
+    <body 
+        class="font-sans antialiased" 
+        x-data="{
+            showCreateSurvey: false,
+            showPublishDateModal: false,
+            showUnpublishDateModal: false
+        }"
+    >
         <div class="min-h-screen bg-gray-100 flex flex-col">
             
             @include('layouts.navigation')
@@ -54,8 +61,8 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-        @livewireScripts
         @stack('scripts')
+        @livewireScripts
 
     </body>
 </html>

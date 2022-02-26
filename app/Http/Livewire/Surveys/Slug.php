@@ -13,7 +13,11 @@ class Slug extends Component
     public $slug;
     public $wireSlugChanged = false;
     public $showDropdown = false;
+    public $validatedSlug;
 
+    protected $rules = [
+        'slug' => 'required|string|max:120|unique:surveys',
+    ];
 
     public function mount($slug) {
 
@@ -63,11 +67,28 @@ class Slug extends Component
     public function validateSlug() 
     {
         $this->slug = Str::slug($this->slug);
+
     
         if ($this->slug !== $this->originalSlug ) {
-            $this->validateOnly('slug', [
-                'slug' => 'required|string|max:120|unique:surveys',
-            ]);
+            // $this->validateOnly('slug', [
+            //     'slug' => 'required|string|max:120|unique:surveys',
+            // ]);
+
+
+            try {
+
+                $this->validateOnly('slug');
+                $this->dispatchBrowserEvent('slugstatus', ['isError' => false]);
+
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                if($e->errors()['slug']) {
+
+                    $this->dispatchBrowserEvent('slugstatus', ['isError' => true]);
+                }
+
+                $this->validateOnly('slug');
+            } 
+
             $this->wireSlugChanged = true;
 
          } else {

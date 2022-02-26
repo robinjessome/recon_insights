@@ -9,10 +9,9 @@ module.exports = {
     ],
 
     theme: {
-
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                sans: ['Rubik', ...defaultTheme.fontFamily.sans],
                 mono: [...defaultTheme.fontFamily.mono],
 
             },

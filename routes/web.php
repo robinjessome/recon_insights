@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\ReconSurveysController;
+use App\Http\Controllers\ImageUploadController;
 
 // use App\Http\Livewire\Surveys\ShowAllSurveys;
 // use App\Http\Livewire\Surveys\Edit;
@@ -34,16 +35,18 @@ Route::middleware(['auth'])->group(function () {
     // Surveys 
     Route::controller(ReconSurveysController::class)->prefix('surveys')->group(function () {
         Route::get('/', 'index')->name('surveys');
+        Route::get('/insights/{surveyId}', 'getInsights')->name('survey-insights');
         Route::get('/edit/{surveyId}', 'showSurvey')->name('edit-survey');
         Route::get('/edit', function () {
             abort(404);
         });
 
-        Route::post('/update', 'updateSurvey')->name('update-survey');
+        Route::post('/update/{surveyId}', 'updateSurvey')->name('update-survey');
 
     });
-    // Route::get('/surveys', ShowAllSurveys::class)->name('surveys');
-    // Route::get('/edit/{surveyId}', Edit::class)->name('edit-survey');
+
+
+    Route::get('/s/{surveyId}', [ReconSurveysController::class, 'show'])->name('public-survey');
 
     Route::get('/admin', function () {
         if(Auth::user()->isAdmin()) {

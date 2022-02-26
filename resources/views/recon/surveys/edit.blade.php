@@ -1,3 +1,8 @@
+@push('styles')
+    {{-- <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.core.css"> --}}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endpush
+
 <x-app-layout>
     <x-slot name="header">
         <x-header>
@@ -6,17 +11,33 @@
                     <x-headline level="h1">{{ __('Editing:') }} <strong>{{  $survey->title }}</strong></x-headline>
                 </div>
                 
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2" 
+                    x-data="{ changed: false, canSubmit: true, slugError: false, publishText: 'Publish now' }"
+                    @setchanged.window="changed = $event.detail"
+                    @setpublishtext.window="publishText = $event.detail"
+                    {{-- @setcansubmit.window="canSubmit = $event.detail" --}}
+                    @slugstatus.window="slugError = $event.detail.isError"
+                >
+                    @if($survey->status !== 'archived')
+                        <x-button 
+                            type="submit" 
+                            form="survey-edit"
+                            color="primary"
+                            x-bind:disabled="(slugError || !changed || !canSubmit)"
+                        > 
+                            {{ __('Save edits') }}
+                        </x-button>
+                    @endif
+
                     <livewire:surveys.publishing :surveyId="$survey->slug" :surveyStatus="$survey->status" />
-                    <x-button 
-                        type="submit" 
-                        {{-- size="md"  --}}
-                        class="" 
-                        style="primary" 
-                        form="survey-edit"
-                    >
-                        {{ __('Save edits') }}
-                    </x-button>
+
+                        
+                    {{-- <ul class="list-disc">
+                    <li>Form Changed: <span x-text="changed"></span></li>
+                    <li>Can submit?: <span x-text="canSubmit"></span></li>
+                    <li>Slug error?: <span x-text="slugError"></span></li>
+                    </ul> --}}
+
                 </div>
         </x-header>
     </x-slot>
@@ -26,6 +47,17 @@
             <div class="text-sm">
                 <a href="{{  route('surveys') }}" class="text-gray-500 hover:text-gray-600"><x-icon.arrow-sm-left iconClass="w-5 h-5"/>{{ __('Back to surveys') }}</a>
             </div>
+            <div>
+                @if($survey->status == 'published')
+                <span class="font-light">{{ __('Published on') }}&nbsp;
+                    <span class="font-bold">{{ $survey->publishDateTime_for_humans }}</span>
+                </span>
+                @elseif($survey->status == 'scheduled')
+                <span class="font-light">{{ __('Scheduled for') }}&nbsp;
+                    <span class="font-bold">{{ $survey->publishDateTime_for_humans }}</span>
+                </span>
+                @endif
+            </div>
             {{-- <div class="">
                 <x-button type="submit" size="md" style="primary" x-bind:disabled="!changed" >{{ __('Save edits') }}</x-button>
             </div> --}}
@@ -34,14 +66,64 @@
         <x-card>
             <form 
                 id="survey-edit"
+                x-data
+                enctype="multipart/form-data"
                 method="POST" 
-                action="{{ route('update-survey') }}"
-                x-data="{ changed: false }"
-                x-on:change.delay="changed = true"
+                action="{{ route('update-survey', [
+                    'surveyId' => $survey->slug
+                ]) }}"
+                x-on:change.delay="$dispatch('setchanged', true)"
             >
             @csrf
+
+            <div class="grid grid-cols-12 gap-x-8">
+                <div class="col-span-8">
+                    <div class="mb-4">
+                        <x-input.label for="title" class="text-xs" :label="__('Title')" />
+                        <x-input 
+                            id="title"
+                            name="title" 
+                            type="text"
+                            stealth
+                            class="text-4xl font-bold"
+                            :value="$survey->title"
+                        /> 
+                        @error('title') <x-input.error>{{ $message }}</x-input.error> @enderror
+                    </div>
+                    <div> 
+                        editor:
+                        {{-- <div id="editorjs" class="p-2 border"></div> --}}
+                        {{-- <div id="editor" class="p-2 border"></div> --}}
+
+                    </div>
+
+                </div>
+                
+                <div class="col-span-4 p-4 border border-gray-200 shadow-sm rounded-md self-start">
+                    
+                    <livewire:surveys.slug :slug="$survey->slug" />
+
+                        <div class="mb-4 @error('description') hasError @enderror">
+                            <x-input.label for="description" class="text-xs" :label="__('Description')" />
+                            @error('description') <x-input.error>{{ $message }}</x-input.error> @enderror
+                            <x-input.textarea 
+                                id="description"
+                                name="description"
+                                stealth 
+                                placeholder="..."
+                            >
+                                {{ $survey->description }}
+                            </x-input.textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <livewire:upload-photo :surveyId="$survey->slug"/> 
+                        </div>
+                
+                </div>
+            </div>
+
             
-            <livewire:surveys.slug :slug="$survey->slug" />
             {{-- <div 
             class="mb-4 @error('slug') text-danger-800 @enderror" 
             :class="{ 'text-success-500': slugChanged, 'text-gray-400': !slugChanged }"
@@ -57,25 +139,34 @@
                 />
                 @error('slug') <x-input.error>{{ $message }}</x-input.error> @enderror
             </div> --}}
+
+
+                        
             
-            <div class="mb-4">
-                <x-input.label for="title" class="text-xs" label="{{  __('Title') }}" />
-                <x-input 
-                    id="title"
-                    name="title" 
-                    type="text"
-                    stealth
-                    class="text-4xl font-bold"
-                    :value="$survey->title"
-                /> 
-                @error('title') <span class="error">{{ $message }}</span> @enderror
-            </div>
+            
 
             </form>
+
         </x-card>
+
+
 
     </x-container>
     
+
+    @push('modals')
+        <x-modal.publish-date-picker :surveyId="$survey->slug" />
+        <x-modal.unpublish-date-picker :surveyId="$survey->slug" />
+    @endpush
+
+    @push('scripts')
+        <script>
+            console.log('loaded/');
+            function handleClick(e) {
+                console.log(e);
+            }
+        </script>
+    @endpush
 
 </x-app-layout>
    
