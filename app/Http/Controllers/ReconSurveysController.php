@@ -51,7 +51,7 @@ class ReconSurveysController extends Controller
         ]);
 
         if($request['featuredImage']) {
-            Storage::disk('s3')->put('avatars/1', $request['featuredImage']);
+            Storage::disk('s3')->put('images', $request['featuredImage']);
         }
 
         // $path = $request['featuredImage']->store('photos');
