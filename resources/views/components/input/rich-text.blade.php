@@ -26,7 +26,9 @@
         quill.root.innerHTML = this.value
  
         quill.on('text-change', () => {
-            $dispatch({{ $dispatch }});
+            if(this.value !== quill.root.innerHTML) {
+                $dispatch({{ $dispatch }});
+            }
             this.value = quill.root.innerHTML
         })
 

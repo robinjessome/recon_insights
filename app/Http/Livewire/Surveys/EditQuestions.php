@@ -29,6 +29,8 @@ class EditQuestions extends Component
     }
 
     public function addQuestion() {
+
+        $this->dispatchBrowserEvent('setchanged', ['true']);
         $question = [
             'id' => uniqid()
         ];     
