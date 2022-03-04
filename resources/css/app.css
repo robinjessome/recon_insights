@@ -95,3 +95,28 @@
 .hasError .stealth {
     /* @apply bg-gray-100 !important */
 }
+
+.draggable-source--is-dragging {
+    @apply bg-gray-100;
+}
+.draggable-mirror {
+    @apply shadow-lg
+}
+
+.ql-toolbar.ql-snow {
+    border: none;
+    @apply rounded-t-md border-gray-200 !important
+}
+.ql-container.ql-snow {
+    @apply rounded-b-md border-gray-200 !important
+}
+
+.ql-align-right {
+    @apply text-right;
+}
+.ql-align-center {
+    @apply text-center;
+}
+.ql-align-justify {
+    @apply text-justify;
+}

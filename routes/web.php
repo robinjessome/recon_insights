@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::get('/s/{surveyId}', [ReconSurveysController::class, 'show'])->name('public-survey');
+    Route::get('/s/{surveyId}', [ReconSurveysController::class, 'showPublic'])->name('public-survey');
 
     Route::get('/admin', function () {
         if(Auth::user()->isAdmin()) {

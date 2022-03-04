@@ -60,9 +60,9 @@
         @stack('modals')
 
         <!-- Scripts -->
+        @livewireScripts
         <script src="{{ asset('js/app.js') }}" defer></script>
         @stack('scripts')
-        @livewireScripts
 
     </body>
 </html>

@@ -19,12 +19,16 @@ class Surveys extends Model
         'slug',
         'featuredImage',
         'author',
-        'content',
-        'published',
+        'mainContent',
+        'questions',
+        'publishDate',
+        'expireDate',
+
     ];
 
     protected $casts = [
-        'content' => 'array'
+        // 'content' => 'array',
+        'questions' => 'array',
     ];
 
     protected $dates = [

@@ -21,7 +21,8 @@ class CreateSurveysTable extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->string('featuredImage')->nullable();
-            $table->json('content')->nullable();
+            $table->longText('mainContent')->nullable();
+            $table->json('questions')->nullable();
             $table->dateTime('publishDate')->nullable();
             $table->dateTime('expireDate')->nullable();
             $table->string('author')->nullable();

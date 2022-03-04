@@ -1,5 +1,4 @@
 
-<div>
 <div class="flex-col space-y-4">
     <div class="flex items-center space-x-4"> 
         <div class="w-1/4"> 
@@ -19,7 +18,7 @@
                     wire:click="sortBy('status')" 
                     :direction="$sortField === 'status' ? $sortDirection : null"
                     class="pr-0">
-                    <x-icon.status-dot />
+                    <x-icon.status-dot x-tooltip="{{ __('Status') }}" />
                 </x-table.heading>
 
                 <x-table.heading sortable 
@@ -50,7 +49,7 @@
                     {{ __('End Date') }}
                 </x-table.heading>
                 <x-table.heading>
-                    <x-icon.edit class="w-4 h-4" />
+                    <x-icon.edit class="w-4 h-4" x-tooltip="{{ __('Edit') }}" />
                 </x-table.heading>
             </x-table.row>
         </x-slot>
@@ -68,20 +67,23 @@
                 wire:key="{{ $loop->index }}"
             >
                 <x-table.cell 
-                    x-data="{ tooltip: false }"
+                    {{-- x-data="{ tooltip: false }"
                     x-on:mouseover="tooltip = true" 
-                    x-on:mouseleave="tooltip = false"
+                    x-on:mouseleave="tooltip = false" --}}
                     class="relative w-8"
                 >
-                    <x-icon.status-dot :status="$survey->status" />
-                    <span 
+                    <x-icon.status-dot 
+                        :status="$survey->status" 
+                        data-tippy-placement="right"
+                        x-tooltip="{{ str()->title( __($survey->status)) }}"/>
+                    {{-- <span 
                         x-cloak 
                         x-show.transition="tooltip"
                         x-transition
                         class="absolute whitespace-nowrap left-12 text-sm shadow-lg bg-white border rounded-sm px-3 py-1 z-30"
                     >
                         {{ str()->title( __($survey->status)) }}
-                    </span>
+                    </span> --}}
                 </x-table.cell>
 
                 <x-table.cell :status="$survey->status" class="font-semibold truncate">
@@ -137,6 +139,4 @@
     <div class="pagination">
         {{  $surveys->links() }}
     </div>
-
-</div>
 </div>

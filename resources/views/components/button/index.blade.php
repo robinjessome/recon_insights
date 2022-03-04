@@ -5,6 +5,7 @@
     'url' => null,
     'appearance' => 'solid',
     'color' => 'default',
+    'expanded' => null,
 ])
 
 @php

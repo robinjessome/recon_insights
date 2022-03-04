@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\ValidatedInput;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Surveys;
@@ -19,11 +20,12 @@ class ReconSurveysController extends Controller
     }
 
 
-
     public function showSurvey($surveyId)
     {
 
-        $survey = Surveys::where('slug', $surveyId)->first();
+        $survey = Surveys::where('slug', $surveyId)
+            ->first();
+
         if(!$survey) {
             // return redirect()->route('surveys');
             abort(404);
@@ -47,20 +49,32 @@ class ReconSurveysController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:120',
             'description' => 'max:255',
-            // 'featuredImage' => 'nullable|image', //image|max:102400
+            'questions' => 'nullable|json',
+            'featuredImage' => 'nullable|image', //image|max:102400
+            'mainContent' => 'nullable|string',
         ]);
 
-        if($request['featuredImage']) {
-            Storage::disk('s3')->put('images', $request['featuredImage']);
+        // dd($request->all());
+
+        if($request['currentImagePath'] == 'remove') {
+            $featuredImagePath = null;
+        } else {
+            $featuredImagePath = $request['currentImagePath'];
         }
 
-        // $path = $request['featuredImage']->store('photos');
+        if($request['featuredImage']) {
+            $featuredImagePath = Storage::disk('s3')->put('images', $request['featuredImage']);        
+            // $path = $request['featuredImage']->store('photos');
+        }
 
         $updated = Surveys::where('slug', $surveyId)
         ->update([
-            'slug' => $validated['slug'],
+            'slug' => Str::slug($validated['slug']), // prepareForValidation? 
             'title' => $validated['title'],
             'description' => $validated['description'],
+            'questions' => $validated['questions'],
+            'featuredImage' => $featuredImagePath,
+            'mainContent' => $validated['mainContent'],
 
             // 'status' => 'published',
             // 'publishDate' => now()->toDateTimeString()
@@ -69,7 +83,7 @@ class ReconSurveysController extends Controller
         session()->flash('message', __('Survey '.$validated['slug'].' updated!'));
         session()->flash('message-type', 'success');
 
-        return redirect()->route('edit-survey', ['surveyId' => $validated['slug']]);
+        return redirect()->route('edit-survey', [ 'surveyId' => Str::slug($validated['slug']) ]);
 
     }
 
@@ -91,10 +105,13 @@ class ReconSurveysController extends Controller
     
     }
 
-    public function show($surveyId)
+    public function showPublic($surveyId)
     {
 
-        $survey = Surveys::where('slug', $surveyId)->first();
+        $survey = Surveys::where('slug', $surveyId)
+            ->where('publishDate', '<=', now())
+            ->first();
+
         if(!$survey) {
             // return redirect()->route('surveys');
             abort(404);
@@ -107,6 +124,25 @@ class ReconSurveysController extends Controller
     
     
     }
+
+
+
+
+
+    
+    //     /**
+    //  * Prepare the data for validation.
+    //  *
+    //  * @return void
+    //  */
+    // public function prepareForValidation(Request $request)
+    // {
+    //     dd($request->all());
+    //     // $this->merge([
+    //     //     'slug' => Str::upper($this->slug),
+    //     // ]);
+    // }
+
 
 
 

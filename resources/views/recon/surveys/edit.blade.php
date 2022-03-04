@@ -1,6 +1,5 @@
 @push('styles')
-    {{-- <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.core.css"> --}}
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">   
 @endpush
 
 <x-app-layout>
@@ -49,8 +48,8 @@
             </div>
             <div>
                 @if($survey->status == 'published')
-                <span class="font-light">{{ __('Published on') }}&nbsp;
-                    <span class="font-bold">{{ $survey->publishDateTime_for_humans }}</span>
+                <span class="font-light text-gray-500 text-sm">{{ __('Published on') }}&nbsp;
+                    <span class="font-bold text-gray-900 text-lg">{{ $survey->publishDateTime_for_humans }}</span>
                 </span>
                 @elseif($survey->status == 'scheduled')
                 <span class="font-light">{{ __('Scheduled for') }}&nbsp;
@@ -90,12 +89,33 @@
                         /> 
                         @error('title') <x-input.error>{{ $message }}</x-input.error> @enderror
                     </div>
+
+                    <x-input.label class="text-xs" :label="__('Main content')" />
+                    <x-input.rich-text 
+                        id="mainContent"
+                        class="mb-4" 
+                        :current="addslashes($survey->mainContent)"
+                        dispatch="'setchanged', true"
+                     />
+
+                    <div class="mb-4">
+                        <livewire:surveys.edit-questions 
+                            :surveyId="$survey->slug"
+                            :questionSource="$survey->questions"
+                        />
+                    </div>
+
+                    
+
+
+                    <?php /*
                     <div> 
-                        editor:
+                        {{-- editor: --}}
                         {{-- <div id="editorjs" class="p-2 border"></div> --}}
                         {{-- <div id="editor" class="p-2 border"></div> --}}
 
                     </div>
+                    */ ?>
 
                 </div>
                 
@@ -117,7 +137,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <livewire:upload-photo :surveyId="$survey->slug"/> 
+                            <livewire:upload-photo :surveyId="$survey->slug" :currentImagePath="$survey->featuredImage" /> 
                         </div>
                 
                 </div>
@@ -160,12 +180,8 @@
     @endpush
 
     @push('scripts')
-        <script>
-            console.log('loaded/');
-            function handleClick(e) {
-                console.log(e);
-            }
-        </script>
+        <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     @endpush
 
 </x-app-layout>
